@@ -26,8 +26,7 @@ Entradas "null" indicam que o campo se encontra vazio na banco de dados.
 |NOME_MUNICIPIO_CIRCUNSCRICAO | Município da delegacia de circunscrição (local onde se deu o fato) |		
 |RUBRICA | Natureza jurídica da ocorrência |	
 |DESCR_CONDUTA | Parágrafos, incisos ou circunstâncias relacionadas a rubrica |		
-|NATUREZA_APURADA | Classificação da natureza criminal verificada e validada pela equipe da SPDados, em conjunto com as Polícias |  
-Civil e Militar, mediante processo de análise e auditoria dos registros. |		
+|NATUREZA_APURADA | Classificação da natureza criminal verificada e validada pela equipe da SPDados, em conjunto com as  Polícias Civil e Militar, mediante processo de análise e auditoria dos registros. |		
 |MES_ESTATISTICA | Mês em que a ocorrência foi inserida na estatística oficial (mês do registro) |		
 |ANO_ESTATISTICA | Ano em que a ocorrência foi inserida na estatística oficial (ano do registro) |		
 |CMD | Área do Comando Polícia Militar (local onde se deu o fato) |		
