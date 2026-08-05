@@ -72,11 +72,9 @@ df_remove_features = full_df.drop(columns=["ANO_BO","NOME_DEPARTAMENTO", "NOME_S
 df_remove_features.info()
 
 # TRANSFORMA DADOS DAS LINHAS DE MAIÚSCULOS PARA MINÚSCULOS
-
 df_lowercase = df_remove_features.apply(lambda x: x.str.lower())
 
-# REMOVE PONTUAÇÃO SE STRING
-
+# REMOVE PONTUAÇÃO DE STRINGS
 columns_clean = ['NOME_MUNICIPIO', 'DESC_PERIODO','BAIRRO', 'DESCR_TIPOLOCAL', 'RUBRICA']
 for col in columns_clean:
     df_lowercase[col] = df_lowercase[col].map(lambda x: unidecode.unidecode(x) if isinstance(x, str) else x)
@@ -85,8 +83,7 @@ print(df_lowercase.iloc[1851])
 
 df_lowercase[df_lowercase['DATA_OCORRENCIA_BO'].eq('14º d.p. pinheiros')]
 
-# ADIÇÃO DE FEATURES EXTRAS
-
+# ADIÇÃO DE FEATURES: DIA, MES, ANO
 df_lowercase['DATA_OCORRENCIA_BO'] = pd.to_datetime(df_lowercase['DATA_OCORRENCIA_BO'], dayfirst=True)
 df_lowercase['ANO'] = pd.to_datetime(df_lowercase['DATA_OCORRENCIA_BO']).dt.year.astype('Int64')
 df_lowercase['MES'] = pd.to_datetime(df_lowercase['DATA_OCORRENCIA_BO']).dt.month.astype('Int64')
@@ -104,17 +101,14 @@ df_rem1 = df_rem.drop(columns=['DATA_OCORRENCIA_BO'])
 df_rem2 = df_rem1.dropna(subset=['DESCR_TIPOLOCAL', 'BAIRRO', 'RUBRICA', 'ANO', 'MES', 'DIA_SEM', 'DIA'])
 
 # REMOÇÃO DE LINHAS COM DADOS INÚTEIS E/OU CONFLITANTES
-
 df_rem3 = df_rem2[df_rem2['DESC_PERIODO'] != "em hora incerta"]
 df_rem4 = df_rem3[df_rem3['ANO'] == 2025]
 
 # USANDO BOOLEAN MASK PARA MODIFICAR LINHAS VÁLIDAS PORÈM COM VALORES FORA DO PADRÃO
-
 mask1 = df_rem4['HORA_OCORRENCIA_BO'].str.contains(r'.', na=False)
 df_rem4.loc[mask1]
 
-# MASKS BOOLEANOS PREENCHEM OS VALORES NULOS DA COLUNA 'DESC_PERIODO' COM BASE 'HORA_OCORRENCIA_BO'
-
+# MASKS BOOLEANOS PREENCHEM OS VALORES FALTANTES DA COLUNA 'DESC_PERIODO' COM BASE EM 'HORA_OCORRENCIA_BO'
 mask1 = df_rem4['HORA_OCORRENCIA_BO'].between('06:00:00', '11:59:59')
 df_rem4.loc[mask1, 'DESC_PERIODO'] = "pela manha"
 
@@ -127,8 +121,7 @@ df_rem4.loc[mask3, 'DESC_PERIODO'] = "a noite"
 mask4 = df_rem4['HORA_OCORRENCIA_BO'].between("00:00:00", "05:59:59")
 df_rem4.loc[mask4, 'DESC_PERIODO'] = "de madrugada"
 
-# DIA PRECISA SER DA SEMANA E NÃO NUMÉRICO, ASSOCIAR CADA MÊS A UM ARRAY/BIBLIOTECA? COMO FAZER COM OS FERIADOS PARA NÃO FAZER 1 POR 1?
-
+# A FEATURE 'DIA' PRECISA SER UMA STRING DO DIA DA SEMANA E NÃO NUMÉRICO, ASSOCIAR CADA MÊS A UM ARRAY/BIBLIOTECA? COMO FAZER COM OS FERIADOS PARA NÃO FAZER 1 POR 1?
 def feriado(dia, mes):
   return (mes, dia) in feriados_sp
 
